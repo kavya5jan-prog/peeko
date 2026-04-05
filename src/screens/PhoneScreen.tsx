@@ -66,17 +66,36 @@ export function PhoneScreen() {
   };
 
   const renderFooter = () => (
-    <View style={{ backgroundColor: "#F8FDFF" }}>
-      <SuggestedPhoneBar 
-        label="MOBILE"
-        value="+91 96853 98465"
-        onPress={handleSuggestionPress}
-      />
-      <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
-        <PhoneKeypad 
-          onPress={handleKeypadPress}
-          onBackspace={handleBackspace}
+    <View style={{ 
+      backgroundColor: "#FFF", 
+      height: 250, 
+      justifyContent: "flex-end",
+      overflow: "hidden" 
+    }}>
+      <View
+        style={{
+          transform: [{ scale: 0.8 }],
+          transformOrigin: "bottom center",
+          width: "125%",
+          marginLeft: "-12.5%",
+        }}
+      >
+        <SuggestedPhoneBar
+          label="MOBILE"
+          value="+91 96853 98465"
+          onPress={handleSuggestionPress}
         />
+        <View
+          style={{
+            paddingBottom: Math.max(insets.bottom, 4),
+            backgroundColor: "#FFF",
+          }}
+        >
+          <PhoneKeypad
+            onPress={handleKeypadPress}
+            onBackspace={handleBackspace}
+          />
+        </View>
       </View>
     </View>
   );
@@ -108,7 +127,7 @@ export function PhoneScreen() {
             paddingHorizontal: onboardingLayout.horizontalPadding,
             flexGrow: 1,
             paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
-            paddingBottom: isSuperCompact ? 0 : 20,
+            paddingBottom: isSuperCompact ? 0 : 260,
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

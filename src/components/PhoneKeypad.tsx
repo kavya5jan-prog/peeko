@@ -105,7 +105,7 @@ export function PhoneKeypad({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "transparent",
-    paddingBottom: 20,
+    paddingBottom: 0,
     width: "100%",
   },
   grid: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     width: "33.33%",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
+    marginBottom: 4,
   },
   keyButton: {
     width: "100%",

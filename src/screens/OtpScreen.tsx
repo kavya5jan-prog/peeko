@@ -166,21 +166,41 @@ export function OtpScreen() {
   const goBack = () => navigation.goBack();
 
   const renderFooter = () => (
-    <View style={{ backgroundColor: "#F8FDFF" }}>
-      {showOtpBar ? (
-        <SuggestedPhoneBar 
-          label="FROM MESSAGES"
-          value="2639"
-          onPress={handleSuggestionPress}
-        />
-      ) : (
-        <View style={{ height: 72 }} />
-      )}
-      <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
-        <PhoneKeypad 
-          onPress={handleKeypadPress}
-          onBackspace={handleBackspace}
-        />
+    <View style={{ 
+      backgroundColor: "#FFF", 
+      height: 250, 
+      justifyContent: "flex-end",
+      overflow: "hidden" 
+    }}>
+      <View
+        style={{
+          transform: [{ scale: 0.8 }],
+          transformOrigin: "bottom center",
+          width: "125%",
+          marginLeft: "-12.5%",
+          backgroundColor: "#FFF",
+        }}
+      >
+        {showOtpBar ? (
+          <SuggestedPhoneBar
+            label="FROM MESSAGES"
+            value="2639"
+            onPress={handleSuggestionPress}
+          />
+        ) : (
+          <View style={{ height: 72 }} />
+        )}
+        <View
+          style={{
+            paddingBottom: Math.max(insets.bottom, 4),
+            backgroundColor: "#FFF",
+          }}
+        >
+          <PhoneKeypad
+            onPress={handleKeypadPress}
+            onBackspace={handleBackspace}
+          />
+        </View>
       </View>
     </View>
   );
@@ -214,7 +234,7 @@ export function OtpScreen() {
             alignItems: "center",
             justifyContent: "flex-start",
             paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
-            paddingBottom: isSuperCompact ? 0 : 40,
+            paddingBottom: isSuperCompact ? 0 : 260,
           }}
           showsVerticalScrollIndicator={false}
         >

@@ -2,7 +2,9 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useState } from "react";
 import {
+  Platform,
   Pressable,
+  ScrollView,
   Text,
   View,
 } from "react-native";
@@ -182,14 +184,16 @@ export function OtpScreen() {
         />
 
         {/* Body */}
-        <View
-          style={{
-            flex: 1,
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
             paddingHorizontal: onboardingLayout.horizontalPadding,
             alignItems: "center",
             justifyContent: "flex-start",
-            paddingTop: 60, // Adjusted to match design section height
+            paddingTop: onboardingLayout.gapHeaderToTitle,
+            paddingBottom: onboardingLayout.keypadFooterHeight, // Essential to clear the keypad
           }}
+          showsVerticalScrollIndicator={false}
         >
           {/* Icon */}
           <View
@@ -325,7 +329,7 @@ export function OtpScreen() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginTop: 32, // More gap as per design
+              marginTop: 32,
               gap: 6,
             }}
           >
@@ -358,7 +362,7 @@ export function OtpScreen() {
               )}
             </Text>
           </View>
-        </View>
+        </ScrollView>
 
         {/* Bottom Keypad Area */}
         <View style={{ backgroundColor: "#F8FDFF" }}>
@@ -371,7 +375,7 @@ export function OtpScreen() {
           ) : (
             <View style={{ height: 72 }} />
           )}
-          <View style={{ paddingBottom: bottomPad, backgroundColor: "#FFF" }}>
+          <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
             <PhoneKeypad 
               onPress={handleKeypadPress}
               onBackspace={handleBackspace}

@@ -59,6 +59,12 @@ export const onboardingLayout = {
   surpriseInfoCardRadius: 28,
   surpriseInfoCardPadding: 19,
   surpriseInfoCardTop: 11,
+  /** Standard footer height for buttons/keypads to ensure scroll clearance */
+  footerHeight: 120,
+  /** Keypad specific height for scroll clearance */
+  keypadFooterHeight: 280,
+  /** Default safe area bottom for web when insets are 0 */
+  webSafeBottom: 20,
 } as const;
 
 export const onboardingTypography = {

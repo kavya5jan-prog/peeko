@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { OnboardingFrame } from "../components/OnboardingFrame";
@@ -66,12 +66,14 @@ export function LocationScreen() {
     <OnboardingFrame backgroundColor={onboardingColors.screenBackground}>
       <View style={{ flex: 1 }}>
         <OnboardingTopBar />
-        <View
-          style={{
-            flex: 1,
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
             paddingHorizontal: onboardingLayout.horizontalPadding,
             paddingTop: onboardingLayout.gapHeaderToTitle,
+            paddingBottom: 20,
           }}
+          showsVerticalScrollIndicator={false}
         >
           <Text
             style={{
@@ -210,6 +212,7 @@ export function LocationScreen() {
               flexDirection: "row",
               alignItems: "flex-start",
               gap: 12,
+              marginBottom: 12,
             }}
           >
             <View
@@ -248,12 +251,14 @@ export function LocationScreen() {
               </Text>
             </View>
           </View>
-        </View>
+        </ScrollView>
 
         <View
           style={{
             paddingHorizontal: onboardingLayout.bottomHorizontalPadding,
-            paddingBottom: bottomPad,
+            paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom),
+            paddingTop: 12,
+            backgroundColor: onboardingColors.screenBackground,
           }}
         >
           <PrimaryPillButton

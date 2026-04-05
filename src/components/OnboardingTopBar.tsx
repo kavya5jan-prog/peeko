@@ -26,6 +26,7 @@ export function OnboardingTopBar({
     <View
       style={{
         paddingTop: Math.max(insets.top, onboardingLayout.topBarTopPadding),
+        minHeight: 56 + Math.max(insets.top, onboardingLayout.topBarTopPadding),
         paddingHorizontal: onboardingLayout.horizontalPadding,
         flexDirection: "row",
         alignItems: "center",

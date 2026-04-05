@@ -92,7 +92,8 @@ export function PhoneScreen() {
             contentContainerStyle={{
               paddingHorizontal: onboardingLayout.horizontalPadding,
               flexGrow: 1,
-              paddingTop: 60, // Bring it lower
+              paddingTop: onboardingLayout.gapHeaderToTitle,
+              paddingBottom: 20,
             }}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
@@ -144,7 +145,7 @@ export function PhoneScreen() {
               value="+91 96853 98465"
               onPress={handleSuggestionPress}
             />
-            <View style={{ paddingBottom: bottomPad, backgroundColor: "#FFF" }}>
+            <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
               <PhoneKeypad 
                 onPress={handleKeypadPress}
                 onBackspace={handleBackspace}

@@ -215,7 +215,9 @@ export function StageScreen() {
         <View
           style={{
             paddingHorizontal: onboardingLayout.bottomHorizontalPadding,
-            paddingBottom: bottomPad,
+            paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom),
+            paddingTop: 12,
+            backgroundColor: onboardingColors.screenBackground, // Match screen bg
           }}
         >
           <PrimaryPillButton

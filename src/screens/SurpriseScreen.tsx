@@ -187,7 +187,7 @@ export function SurpriseScreen() {
           style={{
             flex: 1,
             paddingHorizontal: onboardingLayout.horizontalPadding,
-            paddingTop: onboardingLayout.gapHeaderToTitle,
+            paddingTop: 18,
           }}
         >
           <Text
@@ -198,31 +198,18 @@ export function SurpriseScreen() {
               letterSpacing: onboardingTypography.screenTitle.letterSpacing,
               color: onboardingColors.headline,
               textAlign: "center",
-              maxWidth: 320,
+              width: "100%",
               alignSelf: "center",
             }}
+            numberOfLines={1}
           >
             Surprise for your little one!
           </Text>
 
-          <Text
-            style={{
-              marginTop: 10,
-              fontFamily: peekoFonts.beVietnam500,
-              fontSize: onboardingTypography.screenSubtitle.size + 1,
-              lineHeight: onboardingTypography.screenSubtitle.lineHeight + 2,
-              color: onboardingColors.body,
-              textAlign: "center",
-              maxWidth: 320,
-              alignSelf: "center",
-            }}
-          >
-            Something special is waiting inside for you.
-          </Text>
 
           <View
             style={{
-              marginTop: onboardingLayout.surpriseHeroTop,
+              marginTop: 40,
               height: onboardingLayout.surpriseGiftHeight,
               justifyContent: "center",
               alignItems: "center",
@@ -410,50 +397,6 @@ export function SurpriseScreen() {
             </Animated.View>
           </View>
 
-          <View
-            style={{
-              marginTop: onboardingLayout.surpriseInfoCardTop,
-              backgroundColor: onboardingColors.surpriseCardBg,
-              borderRadius: onboardingLayout.surpriseInfoCardRadius,
-              paddingHorizontal: onboardingLayout.surpriseInfoCardPadding,
-              paddingVertical: onboardingLayout.surpriseInfoCardPadding - 2,
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: onboardingColors.surpriseTagBg,
-                paddingHorizontal: 14,
-                paddingVertical: 6,
-                borderRadius: 14,
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: peekoFonts.plusJakarta500,
-                  fontSize: 14,
-                  lineHeight: 16,
-                  letterSpacing: 0.8,
-                  color: onboardingColors.link,
-                }}
-              >
-                EXCLUSIVE OFFER
-              </Text>
-            </View>
-            <Text
-              style={{
-                marginTop: 14,
-                fontFamily: peekoFonts.beVietnam500,
-                fontSize: Math.round(onboardingTypography.screenSubtitle.size * 0.9),
-                lineHeight: Math.round(onboardingTypography.screenSubtitle.lineHeight * 0.9),
-                color: onboardingColors.body,
-                textAlign: "center",
-              }}
-            >
-              A special gift to start your journey with Peeko. Premium comfort for
-              your baby, at a price that makes you smile.
-            </Text>
-          </View>
         </View>
 
         <View

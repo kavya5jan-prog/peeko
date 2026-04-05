@@ -27,11 +27,11 @@ export const offerClaimColors = {
 export const offerClaimLayout = {
   horizontalPadding: 24,
   /** Space below urgency banner (Figma Main used pt 50 with overlay header; below fixed banner ~15–24). */
-  welcomeTopPadding: 16,
-  sectionGap: 15,
+  welcomeTopPadding: 8,
+  sectionGap: 10,
   welcomeTitleToSubtitle: 8,
   heroCardRadius: 32,
-  heroImageHeight: 256,
+  heroImageHeight: 180,
   widgetRadius: 32,
   widgetGap: 24,
   widgetPaddingH: 24,
@@ -89,9 +89,9 @@ export const offerClaimShadow = {
 
 export const offerClaimTypography = {
   welcomeTitle: {
-    size: 36,
-    lineHeight: 40,
-    letterSpacing: -0.9,
+    size: 24,
+    lineHeight: 28,
+    letterSpacing: -0.6,
   },
   welcomeSubtitle: {
     size: 16,
@@ -103,8 +103,8 @@ export const offerClaimTypography = {
     letterSpacing: 2.4,
   },
   productTitle: {
-    size: 24,
-    lineHeight: 30,
+    size: 18,
+    lineHeight: 24,
     letterSpacing: -0.6,
   },
 } as const;

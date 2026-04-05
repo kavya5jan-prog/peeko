@@ -56,9 +56,9 @@ export function OfferClaimScreen() {
               alignItems: "center",
               justifyContent: "center",
               gap: 8,
-              paddingVertical: 10,
+              paddingVertical: 6,
               paddingHorizontal: 16,
-              minHeight: 42,
+              minHeight: 32,
             }}
           >
 
@@ -128,18 +128,7 @@ export function OfferClaimScreen() {
                   textAlign: "center",
                 }}
               >
-                Flat 25% off
-              </Text>
-              <Text
-                style={{
-                  fontFamily: peekoFonts.beVietnam500,
-                  fontSize: offerClaimTypography.welcomeSubtitle.size,
-                  lineHeight: offerClaimTypography.welcomeSubtitle.lineHeight,
-                  color: offerClaimColors.body,
-                  textAlign: "center",
-                }}
-              >
-                Special welcome gift for your toddler's journey.
+                Flat 96% off
               </Text>
             </View>
 
@@ -216,7 +205,7 @@ export function OfferClaimScreen() {
                   </View>
                 </View>
 
-                <View style={{ padding: 32, position: "relative" }}>
+                <View style={{ padding: 20, position: "relative" }}>
                   <View style={{ position: "absolute", right: 16, top: 16, zIndex: 2 }}>
                     <Image source={iconStar} style={{ width: 20, height: 19 }} resizeMode="contain" />
                   </View>
@@ -229,7 +218,7 @@ export function OfferClaimScreen() {
                       letterSpacing: offerClaimTypography.exclusiveLabel.letterSpacing,
                       color: offerClaimColors.link,
                       textTransform: "uppercase",
-                      paddingBottom: 8,
+                      paddingBottom: 4,
                     }}
                   >
                     First Purchase Exclusive
@@ -243,13 +232,13 @@ export function OfferClaimScreen() {
                       letterSpacing: offerClaimTypography.productTitle.letterSpacing,
                       color: offerClaimColors.headline,
                       textTransform: "uppercase",
-                      paddingBottom: 16,
+                      paddingBottom: 8,
                     }}
                   >
                     Ultra-Soft Training{"\n"}Pants
                   </Text>
 
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingBottom: 16 }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingBottom: 8 }}>
                     <View
                       style={{
                         backgroundColor: offerClaimColors.sizeChipBg,
@@ -281,7 +270,7 @@ export function OfferClaimScreen() {
                     </Text>
                   </View>
 
-                  <View style={{ height: 72, marginBottom: 32, position: "relative" }}>
+                  <View style={{ height: 64, marginBottom: 20, position: "relative" }}>
                     <View style={{ flexDirection: "row", alignItems: "flex-end", position: "absolute", left: 0, top: 0 }}>
                       <Text
                         style={{
@@ -297,8 +286,8 @@ export function OfferClaimScreen() {
                       <Text
                         style={{
                           fontFamily: peekoFonts.beVietnam600,
-                          fontSize: 72,
-                          lineHeight: 72,
+                          fontSize: 64,
+                          lineHeight: 64,
                           letterSpacing: -3.6,
                           color: offerClaimColors.headline,
                         }}
@@ -310,8 +299,8 @@ export function OfferClaimScreen() {
                       <Text
                         style={{
                           fontFamily: peekoFonts.beVietnam600,
-                          fontSize: 18,
-                          lineHeight: 28,
+                          fontSize: 14,
+                          lineHeight: 22,
                           color: offerClaimColors.strikethrough,
                           textDecorationLine: "line-through",
                         }}
@@ -540,7 +529,7 @@ export function OfferClaimScreen() {
             right: 0,
             bottom: 0,
             backgroundColor: offerClaimColors.bottomBarBg,
-            paddingTop: offerClaimLayout.bottomBarPaddingTop,
+            paddingTop: 12,
             paddingBottom: Math.max(insets.bottom, 16),
             paddingHorizontal: offerClaimLayout.horizontalPadding,
             ...offerClaimShadow.bottomBar,
@@ -604,9 +593,9 @@ export function OfferClaimScreen() {
                 borderRadius: 9999,
                 borderWidth: 2,
                 borderColor: offerClaimColors.checkoutBorder,
-                paddingVertical: 18,
-                paddingLeft: 24,
-                paddingRight: 8,
+                paddingVertical: 14,
+                paddingLeft: 20,
+                paddingRight: 6,
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",

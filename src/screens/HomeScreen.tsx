@@ -534,7 +534,7 @@ export function HomeScreen() {
               }}
             >
               <Text style={{ fontFamily: peekoFonts.plusJakarta700, fontSize: 16, color: "#FFFFFF" }}>
-                Open My Surprise
+                Open The Surprise
               </Text>
             </Pressable>
 

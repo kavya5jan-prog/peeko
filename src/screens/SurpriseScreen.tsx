@@ -406,7 +406,7 @@ export function SurpriseScreen() {
           }}
         >
           <PrimaryPillButton
-            label="Claim My ₹1 Offer"
+            label="Buy now"
             trailing=""
             fontFamilySemiBold={peekoFonts.beVietnam600}
             onPress={() => navigation.navigate("OfferClaim")}

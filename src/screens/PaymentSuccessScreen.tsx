@@ -114,7 +114,7 @@ export function PaymentSuccessScreen() {
             
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
               <Text style={{ fontFamily: peekoFonts.beVietnam500, fontSize: 14, color: "#003441" }}>Estimated Delivery</Text>
-              <Text style={{ fontFamily: peekoFonts.beVietnam600, fontSize: 14, color: "#006573" }}>3-5 Days</Text>
+              <Text style={{ fontFamily: peekoFonts.beVietnam600, fontSize: 14, color: "#006573" }}>60 mins</Text>
             </View>
           </View>
         </ScrollView>

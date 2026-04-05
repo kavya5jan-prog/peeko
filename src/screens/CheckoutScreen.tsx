@@ -314,10 +314,10 @@ export function CheckoutScreen() {
                 </Text>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ fontFamily: peekoFonts.beVietnam600, fontSize: 14, color: "#EEF9FC" }}>
+                <Text style={{ fontFamily: peekoFonts.beVietnam600, fontSize: 14, color: "rgba(0,101,115,0.7)" }}>
                   Cute Baby offer
                 </Text>
-                <Text style={{ fontFamily: peekoFonts.beVietnam600, fontSize: 14, color: "#EEF9FC" }}>
+                <Text style={{ fontFamily: peekoFonts.beVietnam600, fontSize: 14, color: "#003441" }}>
                   -₹28.00
                 </Text>
               </View>

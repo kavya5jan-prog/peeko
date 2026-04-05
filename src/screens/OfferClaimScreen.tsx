@@ -324,7 +324,7 @@ export function OfferClaimScreen() {
                   </View>
 
                   <PrimaryPillButton
-                    label="Claim My ₹1 Offer"
+                    label="Buy now"
                     trailing=""
                     leading={
                       <Image

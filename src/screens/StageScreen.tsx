@@ -28,7 +28,7 @@ type StageOption = {
 const STAGE_OPTIONS: StageOption[] = [
   {
     id: "pregnant",
-    title: "Pregnant mom",
+    title: "Baby on the way",
     subtitle: "Expecting a bundle of joy",
     avatar: "🤰",
     avatarBg: "#D6EEF4",

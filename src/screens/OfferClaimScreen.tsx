@@ -1,4 +1,6 @@
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { useState } from "react";
+import Svg, { Path } from "react-native-svg";
 import { useOfferTimer } from "../hooks/useOfferTimer";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -34,10 +36,24 @@ function formatCountdown(totalSeconds: number) {
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
+function StarIcon({ color, size = 14 }: { color: string; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 20 19" fill="none">
+      <Path
+        d="M6.85 14.825L10 12.925L13.15 14.85L12.325 11.25L15.1 8.85L11.45 8.525L10 5.125L8.55 8.5L4.9 8.825L7.675 11.25L6.85 14.825V14.825M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19V19M10 10.25V10.25V10.25V10.25V10.25V10.25V10.25V10.25V10.25V10.25V10.25V10.25"
+        fill={color}
+      />
+    </Svg>
+  );
+}
+
 export function OfferClaimScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const secondsLeft = useOfferTimer();
+
+  const [selectedSize, setSelectedSize] = useState("Size 4");
+  const quantity = 1;
 
   const bottomBarReserve = 120 + insets.bottom;
 
@@ -121,8 +137,8 @@ export function OfferClaimScreen() {
               <Text
                 style={{
                   fontFamily: peekoFonts.plusJakarta800,
-                  fontSize: offerClaimTypography.welcomeTitle.size,
-                  lineHeight: offerClaimTypography.welcomeTitle.lineHeight,
+                  fontSize: 20,
+                  lineHeight: 24,
                   letterSpacing: offerClaimTypography.welcomeTitle.letterSpacing,
                   color: offerClaimColors.headline,
                   textAlign: "center",
@@ -168,7 +184,7 @@ export function OfferClaimScreen() {
                   />
                   <View
                     style={{
-                      height: offerClaimLayout.heroImageHeight,
+                      height: 140,
                       alignItems: "center",
                       justifyContent: "center",
                       paddingHorizontal: 32,
@@ -206,102 +222,82 @@ export function OfferClaimScreen() {
                 </View>
 
                 <View style={{ padding: 20, position: "relative" }}>
-                  <View style={{ position: "absolute", right: 16, top: 16, zIndex: 2 }}>
-                    <Image source={iconStar} style={{ width: 20, height: 19 }} resizeMode="contain" />
-                  </View>
-
                   <Text
                     style={{
                       fontFamily: peekoFonts.beVietnam600,
-                      fontSize: offerClaimTypography.exclusiveLabel.size,
-                      lineHeight: offerClaimTypography.exclusiveLabel.lineHeight,
-                      letterSpacing: offerClaimTypography.exclusiveLabel.letterSpacing,
-                      color: offerClaimColors.link,
+                      fontSize: 10,
+                      lineHeight: 14,
+                      letterSpacing: 1.5,
+                      color: offerClaimColors.checkoutSolid,
                       textTransform: "uppercase",
                       paddingBottom: 4,
                     }}
                   >
-                    First Purchase Exclusive
+                    TRAINING ESSENTIALS
                   </Text>
 
                   <Text
                     style={{
                       fontFamily: peekoFonts.plusJakarta800,
-                      fontSize: offerClaimTypography.productTitle.size,
-                      lineHeight: offerClaimTypography.productTitle.lineHeight,
-                      letterSpacing: offerClaimTypography.productTitle.letterSpacing,
+                      fontSize: 22,
+                      lineHeight: 28,
+                      letterSpacing: -0.5,
                       color: offerClaimColors.headline,
-                      textTransform: "uppercase",
-                      paddingBottom: 8,
+                      paddingBottom: 4,
                     }}
                   >
-                    Ultra-Soft Training{"\n"}Pants
+                    Ultra-Soft Training Pants
                   </Text>
 
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingBottom: 8 }}>
-                    <View
-                      style={{
-                        backgroundColor: offerClaimColors.sizeChipBg,
-                        paddingHorizontal: 8,
-                        paddingVertical: 2,
-                        borderRadius: 6,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: peekoFonts.beVietnam600,
-                          fontSize: 10,
-                          lineHeight: 15,
-                          color: offerClaimColors.body,
-                        }}
-                      >
-                        SIZE 4
-                      </Text>
-                    </View>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 4, paddingBottom: 12 }}>
+                    <StarIcon color={offerClaimColors.headline} />
+                    <StarIcon color={offerClaimColors.headline} />
+                    <StarIcon color={offerClaimColors.headline} />
+                    <StarIcon color={offerClaimColors.headline} />
+                    <StarIcon color={offerClaimColors.headline} />
                     <Text
                       style={{
-                        fontFamily: peekoFonts.beVietnam500,
+                        fontFamily: peekoFonts.beVietnam600,
                         fontSize: 12,
                         lineHeight: 16,
-                        color: "rgba(46,98,115,0.6)",
+                        color: offerClaimColors.checkoutSolid,
+                        marginLeft: 4,
                       }}
                     >
-                      1-3 Years old
+                      4.9 (1,240 reviews)
                     </Text>
                   </View>
 
-                  <View style={{ height: 64, marginBottom: 20, position: "relative" }}>
-                    <View style={{ flexDirection: "row", alignItems: "flex-end", position: "absolute", left: 0, top: 0 }}>
+                  <View style={{ flexDirection: "row", alignItems: "flex-end", paddingBottom: 16 }}>
+                    <Text
+                      style={{
+                        fontFamily: peekoFonts.beVietnam600,
+                        fontSize: 24,
+                        lineHeight: 32,
+                        color: offerClaimColors.checkoutSolid,
+                        paddingBottom: 4,
+                      }}
+                    >
+                      ₹
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: peekoFonts.plusJakarta800,
+                        fontSize: 48,
+                        lineHeight: 48,
+                        letterSpacing: -2,
+                        color: offerClaimColors.checkoutSolid,
+                      }}
+                    >
+                      1
+                    </Text>
+                    <View style={{ marginLeft: 8, paddingBottom: 8 }}>
                       <Text
                         style={{
                           fontFamily: peekoFonts.beVietnam600,
-                          fontSize: 24,
-                          lineHeight: 32,
-                          color: offerClaimColors.headline,
-                          paddingTop: 8,
-                        }}
-                      >
-                        ₹
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: peekoFonts.beVietnam600,
-                          fontSize: 64,
-                          lineHeight: 64,
-                          letterSpacing: -3.6,
-                          color: offerClaimColors.headline,
-                        }}
-                      >
-                        1
-                      </Text>
-                    </View>
-                    <View style={{ position: "absolute", left: 54, top: 13 }}>
-                      <Text
-                        style={{
-                          fontFamily: peekoFonts.beVietnam600,
-                          fontSize: 14,
-                          lineHeight: 22,
-                          color: offerClaimColors.strikethrough,
+                          fontSize: 18,
+                          lineHeight: 24,
+                          color: "#B4C4C8",
                           textDecorationLine: "line-through",
                         }}
                       >
@@ -311,31 +307,86 @@ export function OfferClaimScreen() {
                         style={{
                           fontFamily: peekoFonts.beVietnam600,
                           fontSize: 10,
-                          lineHeight: 15,
+                          lineHeight: 14,
                           letterSpacing: 0.5,
-                          color: offerClaimColors.urgencyRed,
+                          color: "#E24A4A",
                           textTransform: "uppercase",
                           marginTop: 2,
                         }}
                       >
-                        LIMITED TIME ONLY
+                        FLASH SALE ACTIVE
                       </Text>
                     </View>
                   </View>
 
-                  <PrimaryPillButton
-                    label="Buy now"
-                    trailing=""
-                    leading={
-                      <Image
-                        source={iconCart}
-                        style={{ width: 18, height: 16 }}
-                        resizeMode="contain"
-                      />
-                    }
-                    fontFamilySemiBold={peekoFonts.beVietnam600}
-                    onPress={() => navigation.navigate("Checkout" as never)}
-                  />
+                  <Text
+                    style={{
+                      fontFamily: peekoFonts.beVietnam500,
+                      fontSize: 14,
+                      lineHeight: 20,
+                      color: offerClaimColors.headline,
+                      paddingBottom: 20,
+                    }}
+                  >
+                    Premium organic cotton training pants with absorbency and wet-feel for confident transition.
+                  </Text>
+
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingBottom: 12 }}>
+                    <Text
+                      style={{
+                        fontFamily: peekoFonts.beVietnam600,
+                        fontSize: 12,
+                        lineHeight: 16,
+                        letterSpacing: 1,
+                        color: offerClaimColors.headline,
+                      }}
+                    >
+                      SELECT SIZE
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: peekoFonts.beVietnam600,
+                        fontSize: 12,
+                        lineHeight: 16,
+                        color: offerClaimColors.checkoutSolid,
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      Size Guide
+                    </Text>
+                  </View>
+
+                  <View style={{ flexDirection: "row", gap: 8, paddingBottom: 24 }}>
+                    {["Size 2", "Size 3", "Size 4"].map((size) => (
+                      <Pressable
+                        key={size}
+                        onPress={() => setSelectedSize(size)}
+                        style={{
+                          flex: 1,
+                          paddingVertical: 12,
+                          borderRadius: 24,
+                          borderWidth: 1.5,
+                          borderColor: selectedSize === size ? offerClaimColors.checkoutSolid : "#9CB4BB",
+                          backgroundColor: selectedSize === size ? "transparent" : (size === "Size 3" ? "#F5F9FA" : "transparent"),
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: peekoFonts.beVietnam600,
+                            fontSize: 14,
+                            lineHeight: 20,
+                            color: selectedSize === size ? offerClaimColors.checkoutSolid : offerClaimColors.headline,
+                          }}
+                        >
+                          {size}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </View>
+
+                  <View style={{ height: 16 }} />
+
                 </View>
               </View>
             </View>
@@ -558,7 +609,7 @@ export function OfferClaimScreen() {
                     color: offerClaimColors.headline,
                   }}
                 >
-                  ₹1.00
+                  ₹{quantity}.00
                 </Text>
                 <View
                   style={{
@@ -576,7 +627,7 @@ export function OfferClaimScreen() {
                       color: offerClaimColors.link,
                     }}
                   >
-                    1 ITEM
+                    {quantity} ITEM{quantity !== 1 ? 'S' : ''}
                   </Text>
                 </View>
               </View>
@@ -593,7 +644,7 @@ export function OfferClaimScreen() {
                 borderRadius: 9999,
                 borderWidth: 2,
                 borderColor: offerClaimColors.checkoutBorder,
-                paddingVertical: 14,
+                paddingVertical: 10,
                 paddingLeft: 20,
                 paddingRight: 6,
                 flexDirection: "row",
@@ -607,8 +658,8 @@ export function OfferClaimScreen() {
                 <Text
                   style={{
                     fontFamily: peekoFonts.beVietnam600,
-                    fontSize: 16,
-                    lineHeight: 24,
+                    fontSize: 11,
+                    lineHeight: 17,
                     color: offerClaimColors.onPrimarySoft,
                     textAlign: "center",
                   }}
@@ -618,8 +669,8 @@ export function OfferClaimScreen() {
                 <Text
                   style={{
                     fontFamily: peekoFonts.beVietnam600,
-                    fontSize: 16,
-                    lineHeight: 24,
+                    fontSize: 11,
+                    lineHeight: 17,
                     color: offerClaimColors.onPrimarySoft,
                     textAlign: "center",
                   }}

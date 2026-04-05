@@ -68,9 +68,7 @@ export function PhoneScreen() {
   const renderFooter = () => (
     <View style={{ 
       backgroundColor: "#FFF", 
-      height: 250, 
-      justifyContent: "flex-end",
-      overflow: "hidden" 
+      height: 380, 
     }}>
       <View
         style={{
@@ -121,16 +119,12 @@ export function PhoneScreen() {
           }
         />
 
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{
+        <View
+          style={{
+            flex: 1,
             paddingHorizontal: onboardingLayout.horizontalPadding,
-            flexGrow: 1,
             paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
-            paddingBottom: isSuperCompact ? 0 : 260,
           }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
         >
           <Text
             style={{
@@ -171,17 +165,10 @@ export function PhoneScreen() {
             />
           </PeekoSurfaceCard>
 
-          {/* Adaptive Footer: In Super Compact mode, place it inside ScrollView */}
-          {isSuperCompact && (
-            <View style={{ marginTop: 24 }}>
-              {renderFooter()}
-            </View>
-          )}
+        </View>
 
-        </ScrollView>
-
-        {/* Normal Mode: Keep footer fixed at bottom */}
-        {!isSuperCompact && renderFooter()}
+        {/* Footer is now always fixed at bottom since screen is non-scrollable */}
+        {renderFooter()}
       </View>
     </OnboardingFrame>
   );

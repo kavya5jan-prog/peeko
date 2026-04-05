@@ -168,9 +168,7 @@ export function OtpScreen() {
   const renderFooter = () => (
     <View style={{ 
       backgroundColor: "#FFF", 
-      height: 250, 
-      justifyContent: "flex-end",
-      overflow: "hidden" 
+      height: 380, 
     }}>
       <View
         style={{
@@ -227,16 +225,14 @@ export function OtpScreen() {
         />
 
         {/* Body */}
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{
+        <View
+          style={{
+            flex: 1,
             paddingHorizontal: onboardingLayout.horizontalPadding,
             alignItems: "center",
             justifyContent: "flex-start",
             paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
-            paddingBottom: isSuperCompact ? 0 : 260,
           }}
-          showsVerticalScrollIndicator={false}
         >
           {/* Icon - Hidden on small screens to save valuable space */}
           {!isCompact && (
@@ -408,16 +404,10 @@ export function OtpScreen() {
             </Text>
           </View>
 
-          {/* Adaptive Footer: In Super Compact mode, place it inside ScrollView */}
-          {isSuperCompact && (
-            <View style={{ marginTop: 24, width: '100%' }}>
-              {renderFooter()}
-            </View>
-          )}
-        </ScrollView>
+        </View>
 
-        {/* Normal Mode: Keep footer fixed at bottom */}
-        {!isSuperCompact && renderFooter()}
+        {/* Footer is now always fixed at bottom since screen is non-scrollable */}
+        {renderFooter()}
       </View>
     </OnboardingFrame>
   );

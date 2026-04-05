@@ -7,6 +7,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -30,8 +31,12 @@ type Nav = NativeStackNavigationProp<RootStackParamList, "Phone">;
 export function PhoneScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
   const [phone, setPhone] = useState("");
   
+  const isCompact = height < onboardingLayout.compactHeightThreshold;
+  const isSuperCompact = height < onboardingLayout.superCompactHeightThreshold;
+
   const goOtp = (targetPhone?: string) => {
     const finalPhone = targetPhone || phone;
     if (finalPhone.length === 10) {
@@ -60,100 +65,105 @@ export function PhoneScreen() {
     }, 400);
   };
 
-  const bottomPad = insets.bottom > 0 ? insets.bottom : 20;
+  const renderFooter = () => (
+    <View style={{ backgroundColor: "#F8FDFF" }}>
+      <SuggestedPhoneBar 
+        label="MOBILE"
+        value="+91 96853 98465"
+        onPress={handleSuggestionPress}
+      />
+      <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
+        <PhoneKeypad 
+          onPress={handleKeypadPress}
+          onBackspace={handleBackspace}
+        />
+      </View>
+    </View>
+  );
 
   return (
     <OnboardingFrame backgroundColor={onboardingColors.screenBackground}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <View style={{ flex: 1 }}>
-          <OnboardingTopBar
-            hideWordmark={true}
-            right={
-              <Pressable hitSlop={12} onPress={goStage} accessibilityRole="button">
-                <Text
-                  style={{
-                    fontFamily: peekoFonts.beVietnam500,
-                    fontSize: onboardingTypography.skip.size,
-                    lineHeight: onboardingTypography.skip.lineHeight,
-                    color: onboardingColors.link,
-                  }}
-                >
-                  Skip for now
-                </Text>
-              </Pressable>
-            }
-          />
+      <View style={{ flex: 1 }}>
+        <OnboardingTopBar
+          hideWordmark={true}
+          right={
+            <Pressable hitSlop={12} onPress={goStage} accessibilityRole="button">
+              <Text
+                style={{
+                  fontFamily: peekoFonts.beVietnam500,
+                  fontSize: onboardingTypography.skip.size,
+                  lineHeight: onboardingTypography.skip.lineHeight,
+                  color: onboardingColors.link,
+                }}
+              >
+                Skip for now
+              </Text>
+            </Pressable>
+          }
+        />
 
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{
-              paddingHorizontal: onboardingLayout.horizontalPadding,
-              flexGrow: 1,
-              paddingTop: onboardingLayout.gapHeaderToTitle,
-              paddingBottom: 20,
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            paddingHorizontal: onboardingLayout.horizontalPadding,
+            flexGrow: 1,
+            paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
+            paddingBottom: isSuperCompact ? 0 : 20,
+          }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <Text
+            style={{
+              fontFamily: peekoFonts.plusJakarta800,
+              fontSize: isSuperCompact ? 22 : onboardingTypography.screenTitle.size,
+              lineHeight: isSuperCompact ? 28 : onboardingTypography.screenTitle.lineHeight,
+              letterSpacing: onboardingTypography.screenTitle.letterSpacing,
+              color: onboardingColors.headline,
+              textAlign: "center",
+              maxWidth: 250,
+              alignSelf: "center",
             }}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
           >
-            <Text
-              style={{
-                fontFamily: peekoFonts.plusJakarta800,
-                fontSize: onboardingTypography.screenTitle.size,
-                lineHeight: onboardingTypography.screenTitle.lineHeight,
-                letterSpacing: onboardingTypography.screenTitle.letterSpacing,
-                color: onboardingColors.headline,
-                textAlign: "center",
-                maxWidth: 250,
-                alignSelf: "center",
-              }}
-            >
-              Enter your phone number
-            </Text>
-            <Text
-              style={{
-                fontFamily: peekoFonts.beVietnam500,
-                fontSize: onboardingTypography.screenSubtitle.size,
-                lineHeight: onboardingTypography.screenSubtitle.lineHeight,
-                color: onboardingColors.body,
-                textAlign: "center",
-                marginTop: onboardingLayout.gapTitleToSubtitle,
-                maxWidth: 260,
-                alignSelf: "center",
-              }}
-            >
-              We'll send you an OTP to verify your account.
-            </Text>
+            Enter your phone number
+          </Text>
+          <Text
+            style={{
+              fontFamily: peekoFonts.beVietnam500,
+              fontSize: onboardingTypography.screenSubtitle.size,
+              lineHeight: onboardingTypography.screenSubtitle.lineHeight,
+              color: onboardingColors.body,
+              textAlign: "center",
+              marginTop: isCompact ? onboardingLayout.compactGapTitleToSubtitle : onboardingLayout.gapTitleToSubtitle,
+              maxWidth: 260,
+              alignSelf: "center",
+            }}
+          >
+            We'll send you an OTP to verify your account.
+          </Text>
 
-            <PeekoSurfaceCard style={{ marginTop: onboardingLayout.gapSubtitleToCard }}>
-              <PhoneNumberFields
-                countryCode="+91"
-                labelFontFamily={peekoFonts.plusJakarta500}
-                inputFontFamily={peekoFonts.beVietnam500}
-                value={phone}
-                readOnly={true}
-              />
-            </PeekoSurfaceCard>
-
-          </ScrollView>
-
-          <View style={{ backgroundColor: "#F8FDFF" }}>
-            <SuggestedPhoneBar 
-              label="MOBILE"
-              value="+91 96853 98465"
-              onPress={handleSuggestionPress}
+          <PeekoSurfaceCard style={{ marginTop: isCompact ? onboardingLayout.compactGapSubtitleToCard : onboardingLayout.gapSubtitleToCard }}>
+            <PhoneNumberFields
+              countryCode="+91"
+              labelFontFamily={peekoFonts.plusJakarta500}
+              inputFontFamily={peekoFonts.beVietnam500}
+              value={phone}
+              readOnly={true}
             />
-            <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
-              <PhoneKeypad 
-                onPress={handleKeypadPress}
-                onBackspace={handleBackspace}
-              />
+          </PeekoSurfaceCard>
+
+          {/* Adaptive Footer: In Super Compact mode, place it inside ScrollView */}
+          {isSuperCompact && (
+            <View style={{ marginTop: 24 }}>
+              {renderFooter()}
             </View>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+          )}
+
+        </ScrollView>
+
+        {/* Normal Mode: Keep footer fixed at bottom */}
+        {!isSuperCompact && renderFooter()}
+      </View>
     </OnboardingFrame>
   );
 }

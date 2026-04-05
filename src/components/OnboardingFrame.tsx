@@ -1,4 +1,4 @@
-import { Platform, View, type ViewProps } from "react-native";
+import { Platform, View, useWindowDimensions, type ViewProps } from "react-native";
 import { onboardingLayout } from "../theme/onboarding";
 
 type Props = ViewProps & {
@@ -7,6 +7,8 @@ type Props = ViewProps & {
 };
 
 export function OnboardingFrame({ backgroundColor, style, children, ...rest }: Props) {
+  const { height } = useWindowDimensions();
+  
   const webFrame =
     Platform.OS === "web"
       ? {
@@ -16,6 +18,7 @@ export function OnboardingFrame({ backgroundColor, style, children, ...rest }: P
           // Use dvh (dynamic viewport height) for modern browsers, fallback to 100vh
           height: "100dvh" as any,
           minHeight: "100dvh" as any,
+          maxHeight: Platform.OS === 'web' ? height : undefined,
           overflow: "hidden" as const, // The frame itself shouldn't scroll, content should
         }
       : undefined;

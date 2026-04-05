@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -67,9 +67,10 @@ type StageRowProps = {
   option: StageOption;
   selected: boolean;
   onPress: () => void;
+  isCompact?: boolean;
 };
 
-function StageRow({ option, selected, onPress }: StageRowProps) {
+function StageRow({ option, selected, onPress, isCompact }: StageRowProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -78,26 +79,27 @@ function StageRow({ option, selected, onPress }: StageRowProps) {
       style={({ pressed }) => ({
         flexDirection: "row",
         alignItems: "center",
-        minHeight: onboardingLayout.stageRowMinHeight,
+        minHeight: isCompact ? onboardingLayout.compactStageRowMinHeight : onboardingLayout.stageRowMinHeight,
         borderRadius: onboardingLayout.stageRowRadius,
         backgroundColor: onboardingColors.stageRowBg,
         borderWidth: selected ? onboardingLayout.stageRowSelectedBorderWidth : 0,
         borderColor: onboardingColors.link,
         paddingHorizontal: onboardingLayout.stageRowPaddingH,
+        paddingVertical: isCompact ? 8 : 12,
         opacity: pressed ? 0.9 : 1,
       })}
     >
       <View
         style={{
-          width: onboardingLayout.stageAvatarSize,
-          height: onboardingLayout.stageAvatarSize,
+          width: isCompact ? 40 : onboardingLayout.stageAvatarSize,
+          height: isCompact ? 40 : onboardingLayout.stageAvatarSize,
           borderRadius: onboardingLayout.stageAvatarSize / 2,
           backgroundColor: option.avatarBg,
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <Text style={{ fontSize: 24 }}>{option.avatar}</Text>
+        <Text style={{ fontSize: isCompact ? 18 : 24 }}>{option.avatar}</Text>
       </View>
 
       <View style={{ flex: 1, marginLeft: 14, paddingRight: 10 }}>
@@ -115,8 +117,8 @@ function StageRow({ option, selected, onPress }: StageRowProps) {
           style={{
             marginTop: 2,
             fontFamily: peekoFonts.beVietnam500,
-            fontSize: onboardingTypography.screenSubtitle.size,
-            lineHeight: onboardingTypography.screenSubtitle.lineHeight,
+            fontSize: isCompact ? 12 : onboardingTypography.screenSubtitle.size,
+            lineHeight: isCompact ? 16 : onboardingTypography.screenSubtitle.lineHeight,
             color: onboardingColors.body,
           }}
         >
@@ -156,8 +158,30 @@ function StageRow({ option, selected, onPress }: StageRowProps) {
 export function StageScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
   const [selectedStageId, setSelectedStageId] = useState("1-3");
-  const bottomPad = Math.max(insets.bottom, 16) + 24;
+  
+  const isCompact = windowHeight < onboardingLayout.compactHeightThreshold;
+  const isSuperCompact = windowHeight < onboardingLayout.superCompactHeightThreshold;
+
+  const renderButton = () => (
+    <View
+      style={{
+        paddingHorizontal: isSuperCompact ? 0 : onboardingLayout.bottomHorizontalPadding,
+        paddingBottom: isSuperCompact ? 20 : Math.max(insets.bottom, onboardingLayout.webSafeBottom),
+        paddingTop: 12,
+        backgroundColor: isSuperCompact ? "transparent" : onboardingColors.screenBackground,
+      }}
+    >
+      <PrimaryPillButton
+        label="Continue"
+        fontFamilySemiBold={peekoFonts.beVietnam600}
+        onPress={() => {
+          navigation.navigate("Home");
+        }}
+      />
+    </View>
+  );
 
   return (
     <OnboardingFrame backgroundColor={onboardingColors.screenBackground}>
@@ -168,15 +192,15 @@ export function StageScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingHorizontal: onboardingLayout.horizontalPadding,
-            paddingTop: onboardingLayout.gapHeaderToTitle,
-            paddingBottom: 24,
+            paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
+            paddingBottom: isSuperCompact ? 0 : 24,
           }}
         >
           <Text
             style={{
               fontFamily: peekoFonts.plusJakarta800,
-              fontSize: onboardingTypography.screenTitle.size,
-              lineHeight: onboardingTypography.screenTitle.lineHeight,
+              fontSize: isSuperCompact ? 22 : (isCompact ? 24 : onboardingTypography.screenTitle.size),
+              lineHeight: isSuperCompact ? 28 : (isCompact ? 30 : onboardingTypography.screenTitle.lineHeight),
               letterSpacing: onboardingTypography.screenTitle.letterSpacing,
               color: onboardingColors.headline,
               maxWidth: 320,
@@ -186,7 +210,7 @@ export function StageScreen() {
           </Text>
           <Text
             style={{
-              marginTop: onboardingLayout.gapTitleToSubtitle,
+              marginTop: isCompact ? onboardingLayout.compactGapTitleToSubtitle : onboardingLayout.gapTitleToSubtitle,
               fontFamily: peekoFonts.beVietnam500,
               fontSize: onboardingTypography.screenSubtitle.size * 0.85,
               lineHeight: onboardingTypography.screenSubtitle.lineHeight * 0.85,
@@ -199,7 +223,10 @@ export function StageScreen() {
 
           <View
             accessibilityRole="radiogroup"
-            style={{ marginTop: onboardingLayout.gapSubtitleToCard - 4, gap: 12 }}
+            style={{ 
+              marginTop: isCompact ? onboardingLayout.compactGapSubtitleToCard : onboardingLayout.gapSubtitleToCard - 4, 
+              gap: isCompact ? 8 : 12 
+            }}
           >
             {STAGE_OPTIONS.map((option) => (
               <StageRow
@@ -207,28 +234,21 @@ export function StageScreen() {
                 option={option}
                 selected={selectedStageId === option.id}
                 onPress={() => setSelectedStageId(option.id)}
+                isCompact={isCompact}
               />
             ))}
           </View>
+
+          {/* Adaptive Button: In Super Compact mode, place it inside ScrollView */}
+          {isSuperCompact && (
+            <View style={{ marginTop: 24 }}>
+              {renderButton()}
+            </View>
+          )}
         </ScrollView>
 
-        <View
-          style={{
-            paddingHorizontal: onboardingLayout.bottomHorizontalPadding,
-            paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom),
-            paddingTop: 12,
-            backgroundColor: onboardingColors.screenBackground, // Match screen bg
-          }}
-        >
-          <PrimaryPillButton
-            label="Continue"
-            fontFamilySemiBold={peekoFonts.beVietnam600}
-            onPress={() => {
-              void selectedStageId;
-              navigation.navigate("Home");
-            }}
-          />
-        </View>
+        {/* Normal Mode: Keep button fixed at bottom */}
+        {!isSuperCompact && renderButton()}
       </View>
     </OnboardingFrame>
   );

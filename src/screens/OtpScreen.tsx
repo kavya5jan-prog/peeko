@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import Svg, { Path, Polyline, Rect } from "react-native-svg";
@@ -88,8 +89,11 @@ export function OtpScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const insets = useSafeAreaInsets();
-  const bottomPad = insets.bottom > 0 ? insets.bottom : 20;
-
+  const { height } = useWindowDimensions();
+  
+  const isCompact = height < onboardingLayout.compactHeightThreshold;
+  const isSuperCompact = height < onboardingLayout.superCompactHeightThreshold;
+  
   const phone: string = route.params?.phone ?? "";
   const formattedPhone = phone.length === 10
     ? `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`
@@ -101,7 +105,6 @@ export function OtpScreen() {
   const [showOtpBar, setShowOtpBar] = useState(false);
 
   const focusedIndex = digits.findIndex(d => d === "");
-  const activeIndex = focusedIndex === -1 ? 3 : focusedIndex;
 
   // Countdown timer
   useEffect(() => {
@@ -133,7 +136,7 @@ export function OtpScreen() {
       newDigits[nextIdx] = val;
       setDigits(newDigits);
       
-      // If last digit filled, could auto-navigate here too if desired
+      // If last digit filled
       if (nextIdx === OTP_LENGTH - 1) {
         setTimeout(() => {
           navigation.navigate("Location");
@@ -161,6 +164,26 @@ export function OtpScreen() {
   };
 
   const goBack = () => navigation.goBack();
+
+  const renderFooter = () => (
+    <View style={{ backgroundColor: "#F8FDFF" }}>
+      {showOtpBar ? (
+        <SuggestedPhoneBar 
+          label="FROM MESSAGES"
+          value="2639"
+          onPress={handleSuggestionPress}
+        />
+      ) : (
+        <View style={{ height: 72 }} />
+      )}
+      <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
+        <PhoneKeypad 
+          onPress={handleKeypadPress}
+          onBackspace={handleBackspace}
+        />
+      </View>
+    </View>
+  );
 
   return (
     <OnboardingFrame backgroundColor={onboardingColors.screenBackground}>
@@ -190,57 +213,59 @@ export function OtpScreen() {
             paddingHorizontal: onboardingLayout.horizontalPadding,
             alignItems: "center",
             justifyContent: "flex-start",
-            paddingTop: onboardingLayout.gapHeaderToTitle,
-            paddingBottom: onboardingLayout.keypadFooterHeight, // Essential to clear the keypad
+            paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
+            paddingBottom: isSuperCompact ? 0 : 40,
           }}
           showsVerticalScrollIndicator={false}
         >
-          {/* Icon */}
-          <View
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 22,
-              backgroundColor: "#D6EEF5",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 28,
-            }}
-          >
-            {/* Message icon with checkmark badge */}
-            <View style={{ alignItems: "center", justifyContent: "center", width: 46, height: 40 }}>
-              <Svg width={38} height={30} viewBox="0 0 38 30" fill="none">
-                <Rect x="1" y="1" width="36" height="28" rx="4" stroke={onboardingColors.link} strokeWidth="2.2" fill="none" />
-                <Polyline points="1,1 19,17 37,1" stroke={onboardingColors.link} strokeWidth="2.2" fill="none" strokeLinejoin="round" />
-              </Svg>
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: -4,
-                  right: -4,
-                  width: 20,
-                  height: 20,
-                  borderRadius: 10,
-                  backgroundColor: onboardingColors.link,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderWidth: 2,
-                  borderColor: "#D6EEF5",
-                }}
-              >
-                <Svg width={10} height={8} viewBox="0 0 10 8" fill="none">
-                  <Polyline points="1,4 4,7 9,1" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          {/* Icon - Hidden on small screens to save valuable space */}
+          {!isCompact && (
+            <View
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 22,
+                backgroundColor: "#D6EEF5",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 28,
+              }}
+            >
+              {/* Message icon with checkmark badge */}
+              <View style={{ alignItems: "center", justifyContent: "center", width: 46, height: 40 }}>
+                <Svg width={38} height={30} viewBox="0 0 38 30" fill="none">
+                  <Rect x="1" y="1" width="36" height="28" rx="4" stroke={onboardingColors.link} strokeWidth="2.2" fill="none" />
+                  <Polyline points="1,1 19,17 37,1" stroke={onboardingColors.link} strokeWidth="2.2" fill="none" strokeLinejoin="round" />
                 </Svg>
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: -4,
+                    right: -4,
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    backgroundColor: onboardingColors.link,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderWidth: 2,
+                    borderColor: "#D6EEF5",
+                  }}
+                >
+                  <Svg width={10} height={8} viewBox="0 0 10 8" fill="none">
+                    <Polyline points="1,4 4,7 9,1" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  </Svg>
+                </View>
               </View>
             </View>
-          </View>
+          )}
 
           {/* Title */}
           <Text
             style={{
               fontFamily: peekoFonts.plusJakarta800,
-              fontSize: onboardingTypography.screenTitle.size,
-              lineHeight: onboardingTypography.screenTitle.lineHeight,
+              fontSize: isSuperCompact ? 22 : onboardingTypography.screenTitle.size,
+              lineHeight: isSuperCompact ? 28 : onboardingTypography.screenTitle.lineHeight,
               letterSpacing: onboardingTypography.screenTitle.letterSpacing,
               color: onboardingColors.headline,
               textAlign: "center",
@@ -257,7 +282,7 @@ export function OtpScreen() {
               lineHeight: onboardingTypography.screenSubtitle.lineHeight,
               color: onboardingColors.body,
               textAlign: "center",
-              marginTop: 12,
+              marginTop: isCompact ? onboardingLayout.compactGapTitleToSubtitle : 12,
             }}
           >
             We've sent a 4-digit code to
@@ -312,7 +337,7 @@ export function OtpScreen() {
             style={{
               flexDirection: "row",
               gap: 12,
-              marginTop: 36,
+              marginTop: isCompact ? onboardingLayout.compactGapSubtitleToCard : 36,
             }}
           >
             {digits.map((digit, idx) => (
@@ -329,7 +354,7 @@ export function OtpScreen() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginTop: 32,
+              marginTop: isCompact ? 16 : 32,
               gap: 6,
             }}
           >
@@ -362,26 +387,17 @@ export function OtpScreen() {
               )}
             </Text>
           </View>
+
+          {/* Adaptive Footer: In Super Compact mode, place it inside ScrollView */}
+          {isSuperCompact && (
+            <View style={{ marginTop: 24, width: '100%' }}>
+              {renderFooter()}
+            </View>
+          )}
         </ScrollView>
 
-        {/* Bottom Keypad Area */}
-        <View style={{ backgroundColor: "#F8FDFF" }}>
-          {showOtpBar ? (
-            <SuggestedPhoneBar 
-              label="FROM MESSAGES"
-              value="2639"
-              onPress={handleSuggestionPress}
-            />
-          ) : (
-            <View style={{ height: 72 }} />
-          )}
-          <View style={{ paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom), backgroundColor: "#FFF" }}>
-            <PhoneKeypad 
-              onPress={handleKeypadPress}
-              onBackspace={handleBackspace}
-            />
-          </View>
-        </View>
+        {/* Normal Mode: Keep footer fixed at bottom */}
+        {!isSuperCompact && renderFooter()}
       </View>
     </OnboardingFrame>
   );

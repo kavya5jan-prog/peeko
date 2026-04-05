@@ -4,12 +4,13 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
-import Svg, { Circle, Path } from "react-native-svg";
+import { Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
+import Svg, { Circle, Path, Rect } from "react-native-svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { OnboardingFrame } from "../components/OnboardingFrame";
 import { OnboardingTopBar } from "../components/OnboardingTopBar";
 import { PrimaryPillButton } from "../components/PrimaryPillButton";
+import { PeekoSurfaceCard } from "../components/PeekoSurfaceCard";
 import type { RootStackParamList } from "../navigation/types";
 import { peekoFonts } from "../theme/fonts";
 import {
@@ -58,31 +59,61 @@ function LocateIcon() {
 export function LocationScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
   const [query, setQuery] = useState("");
-  const [searchFocused, setSearchFocused] = useState(true);
-  const bottomPad = onboardingLayout.bottomBarPaddingBottom + insets.bottom;
+  const [searchFocused, setSearchFocused] = useState(false);
+  
+  const isCompact = windowHeight < onboardingLayout.compactHeightThreshold;
+  const isSuperCompact = windowHeight < onboardingLayout.superCompactHeightThreshold;
+
+  const goStage = () => navigation.navigate("Stage");
+
+  const renderButton = () => (
+    <View
+      style={{
+        paddingHorizontal: isSuperCompact ? 0 : onboardingLayout.bottomHorizontalPadding,
+        paddingBottom: isSuperCompact ? 20 : Math.max(insets.bottom, onboardingLayout.webSafeBottom),
+        paddingTop: 12,
+        backgroundColor: isSuperCompact ? "transparent" : onboardingColors.screenBackground,
+      }}
+    >
+      <PrimaryPillButton
+        label="Continue"
+        onPress={goStage}
+        fontFamilySemiBold={peekoFonts.plusJakarta700}
+      />
+    </View>
+  );
 
   return (
     <OnboardingFrame backgroundColor={onboardingColors.screenBackground}>
       <View style={{ flex: 1 }}>
-        <OnboardingTopBar />
+        <OnboardingTopBar
+          left={
+            <Pressable hitSlop={12} onPress={() => navigation.goBack()} accessibilityRole="button">
+              <Text style={{ fontSize: 22, color: onboardingColors.link }}>←</Text>
+            </Pressable>
+          }
+        />
+
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={{
             paddingHorizontal: onboardingLayout.horizontalPadding,
-            paddingTop: onboardingLayout.gapHeaderToTitle,
-            paddingBottom: 20,
+            paddingTop: isCompact ? onboardingLayout.compactGapHeaderToTitle : onboardingLayout.gapHeaderToTitle,
+            paddingBottom: isSuperCompact ? 0 : 20,
           }}
           showsVerticalScrollIndicator={false}
         >
           <Text
             style={{
               fontFamily: peekoFonts.plusJakarta800,
-              fontSize: onboardingTypography.screenTitle.size,
-              lineHeight: onboardingTypography.screenTitle.lineHeight,
+              fontSize: isSuperCompact ? 22 : onboardingTypography.screenTitle.size,
+              lineHeight: isSuperCompact ? 28 : onboardingTypography.screenTitle.lineHeight,
               letterSpacing: onboardingTypography.screenTitle.letterSpacing,
               color: onboardingColors.headline,
               textAlign: "center",
+              marginBottom: isCompact ? onboardingLayout.compactGapTitleToSubtitle : 24,
             }}
           >
             Select location
@@ -90,15 +121,15 @@ export function LocationScreen() {
 
           <View
             style={{
-              marginTop: onboardingLayout.gapTitleToSearch,
-              backgroundColor: "#F8F8F8",
-              borderRadius: 22,
-              paddingHorizontal: 16,
-              height: 56,
+              height: 48,
+              borderRadius: 24,
+              borderWidth: 1.5,
+              borderColor: searchFocused ? onboardingColors.link : onboardingColors.inputBorder,
+              backgroundColor: "#FFF",
               flexDirection: "row",
               alignItems: "center",
-              borderWidth: searchFocused ? 1.5 : 0,
-              borderColor: onboardingColors.link,
+              paddingHorizontal: 16,
+              marginBottom: isCompact ? onboardingLayout.compactGapSearchToMap : 24,
             }}
           >
             <SearchIcon />
@@ -113,19 +144,20 @@ export function LocationScreen() {
                 flex: 1,
                 marginLeft: 12,
                 fontFamily: peekoFonts.beVietnam500,
-                fontSize: 30 / 2,
+                fontSize: 15,
                 color: onboardingColors.headline,
               }}
             />
           </View>
 
+          {/* Map Preview */}
           <View
             style={{
-              marginTop: onboardingLayout.gapSearchToMap,
-              borderRadius: onboardingLayout.mapRadius,
+              height: isSuperCompact ? 150 : (isCompact ? onboardingLayout.compactMapHeight : 340),
+              borderRadius: 24,
               overflow: "hidden",
-              height: onboardingLayout.mapHeight,
-              backgroundColor: "#0E4A60",
+              marginBottom: 16,
+              backgroundColor: "#0C4961",
             }}
           >
             <Svg width="100%" height="100%" viewBox="0 0 320 344" preserveAspectRatio="none">
@@ -136,53 +168,29 @@ export function LocationScreen() {
                 fill="#FFF8D5"
               />
               <Path d="M0 177h320" stroke="#D5D2B4" strokeWidth={2} />
-              <Path d="M35 235c35-12 75-8 121 8" stroke="#1B5769" strokeWidth={3} />
-              <Path d="M155 286c32-4 74 7 130 29" stroke="#1B5769" strokeWidth={3} />
-              <Path d="M92 262c12 14 27 20 49 16" stroke="#3A7B8A" strokeWidth={2} />
-              <Path d="M216 255c17-8 43-7 68 0" stroke="#3A7B8A" strokeWidth={2} />
             </Svg>
 
-            <View style={{ position: "absolute", top: 70, left: "47%" }}>
-              <View
-                style={{
-                  position: "absolute",
-                  top: 44,
-                  left: -20,
-                  width: 40,
-                  height: 12,
-                  borderRadius: 24,
-                  backgroundColor: "rgba(0, 0, 0, 0.35)",
-                }}
-              />
-              <Svg width={44} height={58} viewBox="0 0 44 58">
+            <View style={{ position: "absolute", top: isSuperCompact ? 20 : (isCompact ? 40 : 70), left: "47%" }}>
+              {!isSuperCompact && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 44,
+                    left: -20,
+                    width: 40,
+                    height: 12,
+                    borderRadius: 24,
+                    backgroundColor: "rgba(0, 0, 0, 0.35)",
+                  }}
+                />
+              )}
+              <Svg width={isSuperCompact ? 30 : 44} height={isSuperCompact ? 40 : 58} viewBox="0 0 44 58">
                 <Path
                   d="M22 58c0-1-13-12-13-25a13 13 0 1126 0c0 13-13 24-13 25z"
                   fill="#FFF5D6"
                 />
                 <Circle cx={22} cy={31} r={6.5} fill={splashColors.logo} />
               </Svg>
-              <View
-                style={{
-                  position: "absolute",
-                  top: 10,
-                  left: 3,
-                  backgroundColor: splashColors.logo,
-                  paddingHorizontal: 10,
-                  paddingVertical: 3,
-                  borderRadius: 12,
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: peekoFonts.beVietnam600,
-                    fontSize: 12,
-                    lineHeight: 14,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  YOU
-                </Text>
-              </View>
             </View>
 
             <Pressable
@@ -190,8 +198,8 @@ export function LocationScreen() {
                 position: "absolute",
                 right: 14,
                 bottom: 14,
-                width: 44,
-                height: 44,
+                width: isSuperCompact ? 32 : 44,
+                height: isSuperCompact ? 32 : 44,
                 borderRadius: 22,
                 backgroundColor: "#F4F8FB",
                 alignItems: "center",
@@ -202,25 +210,23 @@ export function LocationScreen() {
             </Pressable>
           </View>
 
-          <View
+          {/* Address Card */}
+          <PeekoSurfaceCard
             style={{
-              marginTop: onboardingLayout.gapMapToAddress,
-              backgroundColor: "#F8F8F8",
-              borderRadius: onboardingLayout.addressCardRadius,
-              paddingVertical: onboardingLayout.addressCardPaddingV,
-              paddingHorizontal: onboardingLayout.addressCardPaddingH,
               flexDirection: "row",
               alignItems: "flex-start",
+              paddingVertical: 16,
+              paddingHorizontal: 20,
               gap: 12,
-              marginBottom: 12,
+              marginBottom: 10,
             }}
           >
             <View
               style={{
-                width: 34,
-                height: 34,
-                borderRadius: 17,
-                backgroundColor: "#E6EEF2",
+                width: 32,
+                height: 32,
+                borderRadius: 16,
+                backgroundColor: "#E8F4F8",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -230,9 +236,8 @@ export function LocationScreen() {
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  fontFamily: peekoFonts.plusJakarta500,
-                  fontSize: 30 / 2,
-                  lineHeight: 22,
+                  fontFamily: peekoFonts.plusJakarta700,
+                  fontSize: 16,
                   color: onboardingColors.headline,
                 }}
               >
@@ -242,31 +247,26 @@ export function LocationScreen() {
                 style={{
                   marginTop: 2,
                   fontFamily: peekoFonts.beVietnam500,
-                  fontSize: 16,
-                  lineHeight: 28,
+                  fontSize: 14,
+                  lineHeight: 20,
                   color: "#3D7082",
                 }}
               >
-                HAL 3rd Stage, Bengaluru,{"\n"}Karnataka 560008, India
+                HAL 3rd Stage, Bengaluru, Karnataka 560008, India
               </Text>
             </View>
-          </View>
+          </PeekoSurfaceCard>
+
+          {/* Adaptive Button: In Super Compact mode, place it inside ScrollView */}
+          {isSuperCompact && (
+            <View style={{ marginTop: 12 }}>
+              {renderButton()}
+            </View>
+          )}
         </ScrollView>
 
-        <View
-          style={{
-            paddingHorizontal: onboardingLayout.bottomHorizontalPadding,
-            paddingBottom: Math.max(insets.bottom, onboardingLayout.webSafeBottom),
-            paddingTop: 12,
-            backgroundColor: onboardingColors.screenBackground,
-          }}
-        >
-          <PrimaryPillButton
-            label="Continue"
-            fontFamilySemiBold={peekoFonts.beVietnam600}
-            onPress={() => navigation.navigate("Stage")}
-          />
-        </View>
+        {/* Normal Mode: Keep button fixed at bottom */}
+        {!isSuperCompact && renderButton()}
       </View>
     </OnboardingFrame>
   );

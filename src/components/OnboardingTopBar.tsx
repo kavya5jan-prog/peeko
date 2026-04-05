@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { peekoFonts } from "../theme/fonts";
 import {
@@ -21,12 +21,17 @@ export function OnboardingTopBar({
   hideWordmark = false,
 }: Props) {
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  
+  const isSuperCompact = height < onboardingLayout.superCompactHeightThreshold;
+  const topPad = isSuperCompact ? 8 : Math.max(insets.top, onboardingLayout.topBarTopPadding);
+  const minBarHeight = isSuperCompact ? 44 : 56;
 
   return (
     <View
       style={{
-        paddingTop: Math.max(insets.top, onboardingLayout.topBarTopPadding),
-        minHeight: 56 + Math.max(insets.top, onboardingLayout.topBarTopPadding),
+        paddingTop: topPad,
+        minHeight: minBarHeight + topPad,
         paddingHorizontal: onboardingLayout.horizontalPadding,
         flexDirection: "row",
         alignItems: "center",
@@ -37,8 +42,8 @@ export function OnboardingTopBar({
         <Text
           style={{
             fontFamily: peekoFonts.plusJakarta800,
-            fontSize: onboardingTypography.headerWordmark.size,
-            lineHeight: onboardingTypography.headerWordmark.lineHeight,
+            fontSize: isSuperCompact ? 20 : onboardingTypography.headerWordmark.size,
+            lineHeight: isSuperCompact ? 24 : onboardingTypography.headerWordmark.lineHeight,
             letterSpacing: onboardingTypography.headerWordmark.letterSpacing,
             color: wordmarkColor,
           }}

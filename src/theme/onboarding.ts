@@ -65,6 +65,17 @@ export const onboardingLayout = {
   keypadFooterHeight: 280,
   /** Default safe area bottom for web when insets are 0 */
   webSafeBottom: 20,
+  /** Mobile Web Response: Threshhold for compact mode */
+  compactHeightThreshold: 700,
+  /** Compact spacing tokens */
+  compactGapHeaderToTitle: 12,
+  compactGapTitleToSubtitle: 8,
+  compactGapSubtitleToCard: 16,
+  compactGapSearchToMap: 12,
+  compactMapHeight: 220,
+  compactStageRowMinHeight: 64,
+  /** Adaptive Flow: Threshold for moving footers into ScrollView */
+  superCompactHeightThreshold: 600,
 } as const;
 
 export const onboardingTypography = {

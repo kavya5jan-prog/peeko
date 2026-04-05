@@ -356,7 +356,7 @@ export function OfferClaimScreen() {
                     </Text>
                   </View>
 
-                  <View style={{ flexDirection: "row", gap: 8, paddingBottom: 24 }}>
+                  <View style={{ flexDirection: "row", gap: 8 }}>
                     {["Size 2", "Size 3", "Size 4"].map((size) => (
                       <Pressable
                         key={size}
@@ -385,7 +385,7 @@ export function OfferClaimScreen() {
                     ))}
                   </View>
 
-                  <View style={{ height: 16 }} />
+
 
                 </View>
               </View>

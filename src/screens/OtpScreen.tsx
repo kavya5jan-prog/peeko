@@ -167,8 +167,9 @@ export function OtpScreen() {
 
   const renderFooter = () => (
     <View style={{ 
-      backgroundColor: "#FFF", 
+      backgroundColor: "transparent", 
       height: 380, 
+      justifyContent: "flex-end",
     }}>
       <View
         style={{

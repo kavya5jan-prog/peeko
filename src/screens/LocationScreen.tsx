@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
+import { Image, Pressable, ScrollView, Text, TextInput, View, useWindowDimensions } from "react-native";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { OnboardingFrame } from "../components/OnboardingFrame";
@@ -160,15 +160,11 @@ export function LocationScreen() {
               backgroundColor: "#0C4961",
             }}
           >
-            <Svg width="100%" height="100%" viewBox="0 0 320 344" preserveAspectRatio="none">
-              <Path d="M0 0h320v344H0z" fill="#0C4961" />
-              <Path d="M0 180c60-4 150-8 320 2v162H0z" fill="#2E6B7E" />
-              <Path
-                d="M170 344c-18-75 44-108 62-143 13-25-7-39-41-35-40 6-88 45-146 40v-18c66 6 115-34 163-42 58-9 85 19 62 63-20 39-86 74-80 135z"
-                fill="#FFF8D5"
-              />
-              <Path d="M0 177h320" stroke="#D5D2B4" strokeWidth={2} />
-            </Svg>
+            <Image
+              source={require("../../assets/location/bangalore_map.png")}
+              style={{ width: "100%", height: "100%" }}
+              resizeMode="cover"
+            />
 
             <View style={{ position: "absolute", top: isSuperCompact ? 20 : (isCompact ? 40 : 70), left: "47%" }}>
               {!isSuperCompact && (
